@@ -33,5 +33,7 @@ def parse_journal_json(lines):
             "timestamp_us": int(raw_ts),
             "cursor": cursor,
             "boot_id": obj.get("_BOOT_ID"),
+            "pid": obj.get("_PID"),
+            "unit": obj.get("_SYSTEMD_UNIT"),
             "message": message,
         }
