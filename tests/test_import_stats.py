@@ -5,6 +5,7 @@ from pathlib import Path
 
 from results_manager.import_stats import import_file, make_records
 from results_manager.storage import Storage
+from results_manager.snapshot import UnstableSnapshotError
 
 
 def sample():
@@ -76,7 +77,7 @@ class StatsImportTests(unittest.TestCase):
 
     def test_invalid_json_does_not_modify_db(self):
         self.src.write_text("{invalid", encoding="utf-8")
-        with self.assertRaises(json.JSONDecodeError):
+        with self.assertRaises(UnstableSnapshotError):
             import_file(self.db, self.src, "speedtest01")
         self.assertFalse(self.db.exists())
 
