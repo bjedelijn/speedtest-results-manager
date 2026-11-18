@@ -32,7 +32,13 @@ def derive_legacy(database, server_id):
     records = []
     active = None
     ambiguous = False
+    process_identity = None
     for event in events:
+        identity = (event.get("boot_id"), event.get("pid"))
+        if identity != process_identity:
+            active = None
+            ambiguous = False
+            process_identity = identity
         msg = event["message"]
         setup = LEGACY_SETUP.search(msg)
         if setup:
