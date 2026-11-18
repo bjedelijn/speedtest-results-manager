@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .parsers import parse_udpst_stats
 from .storage import Storage
+from .snapshot import read_stable_json, UnstableSnapshotError
 
 
 def make_records(data, server_id):
@@ -29,8 +30,7 @@ def make_records(data, server_id):
 
 def import_file(database, filename, server_id):
     """Parse fully before transaction; no changes if JSON is malformed."""
-    with Path(filename).open(encoding="utf-8") as stream:
-        data = json.load(stream)
+    data = read_stable_json(filename)
     if not isinstance(data, dict):
         raise ValueError("stats root must be an object")
     records = list(make_records(data, server_id))
